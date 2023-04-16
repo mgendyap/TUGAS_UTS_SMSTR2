@@ -1,58 +1,74 @@
 package main
 
 import (
-	// "bufio"
+	"bufio"
 	"fmt"
-	// "os"
-	// "os/exec"
-	// "time"
+	"os"
+	"os/exec"
+	"time"
 	"utsstrukdat/controller/message"
 	"utsstrukdat/controller/post"
 	"utsstrukdat/controller/user"
 	"utsstrukdat/db"
 )
 
-// func clear() {
-// 	cmd := exec.Command("cmd", "/c", "cls")
-// 	cmd.Stdout = os.Stdout
-// 	cmd.Run()
-// }
+func clear() {
+	cmd := exec.Command("cmd", "/c", "cls")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
 
 func main() {
-	// scanner := bufio.NewScanner(os.Stdin)
+	clear()
+	scanner := bufio.NewScanner(os.Stdin)
+	var title string
+	var category string
+	var pilihCategory int
+	// time.Sleep(1 * time.Second)
 	for {
 		
-		var username string
-		var password string
-		var title string
-		var body string
-		var category string
-		var pilihCategory int
-
+		// var username string
+		// var password string
+		// var title string
+		// var body string
+		// var category string
+		// var pilihCategory int
 
 		menu:
-		fmt.Println("Menu")
+		fmt.Println("-----------------------------------------------")
+		fmt.Println("                    MENU                       ")
+		fmt.Println("-----------------------------------------------")
 		fmt.Println("1. Register")
 		fmt.Println("2. Login")
 		fmt.Println("3. Exit")
+		fmt.Println("-----------------------------------------------")
 		fmt.Println("Masukan pilihan : ")
 
 		var inputMenu int
 		fmt.Scan(&inputMenu)
+		scanner.Scan()
 
 		if inputMenu == 1 {
-			
-			fmt.Println("Register")
+			clear()
+			fmt.Println("-----------------------------------------------")
+			fmt.Println("                 REGISTER                      ")
+			fmt.Println("-----------------------------------------------")
 			fmt.Println("Masukan Username : ")
 
-			fmt.Scan(&username)
+			// fmt.Scan(&username)
+			scanner.Scan()
+			username := scanner.Text()
 
 			fmt.Println("Masukan password : ")
-			fmt.Scan(&password)
+			// fmt.Scan(&password)
+			scanner.Scan()
+			password := scanner.Text()
 
 			fmt.Println("Masukan verifikasi password : ")
-			var verPassword string
-			fmt.Scan(&verPassword)
+			// var verPassword string
+			// fmt.Scan(&verPassword)
+			scanner.Scan()
+			verPassword := scanner.Text()
 
 			dataUser := &db.FieldUser{
 				Username: username,
@@ -60,7 +76,7 @@ func main() {
 			}
 
 			kode := userController.Register(dataUser, &verPassword)
-
+			fmt.Println("-----------------------------------------------")
 			if kode == 200 {
 				fmt.Println("Akun sudah di buat")
 			} else if kode == 400 {
@@ -68,14 +84,22 @@ func main() {
 			} else if kode == 409 {
 				fmt.Println("Username sudah di gunakan")
 			}
+			time.Sleep(1 * time.Second)
+			clear()
 		} else if inputMenu == 2 {
-			
-			fmt.Println("Login")
+			clear()
+			fmt.Println("-----------------------------------------------")
+			fmt.Println("                     LOGIN                     ")
+			fmt.Println("-----------------------------------------------")
 			fmt.Println("Masukan username : ")
-			fmt.Scan(&username)
+			// fmt.Scan(&username)
+			scanner.Scan()
+			username := scanner.Text()
 
 			fmt.Println("Masukan password : ")
-			fmt.Scan(&password)
+			// fmt.Scan(&password)
+			scanner.Scan()
+			password := scanner.Text()
 
 			dataUser := &db.FieldUser{
 				Username: username,
@@ -85,10 +109,15 @@ func main() {
 			token := userController.Login(dataUser)
 			
 			if token != nil {
+				fmt.Println("-----------------------------------------------")
+				fmt.Println("Selamat datang ", token.Username)
+				time.Sleep(1 * time.Second)
+				clear()
 				for {
 					dashboard:
-
-					fmt.Println("Dashboard")
+					fmt.Println("-----------------------------------------------")
+					fmt.Println("                  DASHBOARD                    ")
+					fmt.Println("-----------------------------------------------")
 					fmt.Println("1. Beranda")
 					fmt.Println("2. Pesan")
 					fmt.Println("3. Buat cerita")
@@ -100,79 +129,116 @@ func main() {
 
 					var inputDashboard int
 					fmt.Scan(&inputDashboard)
+					scanner.Scan()
 
 					if inputDashboard == 1 {
-						
+						clear()
 						post := postController.ShowPost()
-
+						fmt.Println("-----------------------------------------------")
+						fmt.Println("                  BERANDA                      ")
+						fmt.Println("-----------------------------------------------\n")
+						
 						for _, val := range *post {
+							fmt.Println("-----------------------------------------------")
 							fmt.Println("Author : ", val.Author)
+							fmt.Println("-----------------------------------------------")
 							fmt.Println("Kategori : ", val.Category)
 							fmt.Println("Title : ", val.Title)
 							fmt.Println("Body : ", val.Body)
+							fmt.Println("-----------------------------------------------\n")
 						}
 
 					} else if inputDashboard == 2 {
-
+						clear()
 						for {
 							
 							var pilihPesan int
+							fmt.Println("-----------------------------------------------")
+							fmt.Println("                     PESAN                     ")
+							fmt.Println("-----------------------------------------------")
 							fmt.Println("1. Lihat Pesan")
 							fmt.Println("2. Kirim Pesan")
 							fmt.Println("3. Kembali ke Dashboard")
+							fmt.Println("Masukan pilihan")
 							fmt.Scan(&pilihPesan)
+							scanner.Scan()
 
 							if pilihPesan == 1 {
-								
-
+								clear()
 								message := messageController.ShowMessage(&token.Username)
+								fmt.Println("-----------------------------------------------")
+								fmt.Println("                  LIHAT PESAN                  ")
+								fmt.Println("-----------------------------------------------\n")
 
 								for _, val := range *message {
+									fmt.Println("-----------------------------------------------")
 									fmt.Println("From : ", val.From)
 									fmt.Println("Message : ", val.Message)
+									fmt.Println("-----------------------------------------------\n")
 								}
 
 							} else if pilihPesan == 2 {
-								
-								var penerima string
+								clear()
+								// var penerima string
+								fmt.Println("-----------------------------------------------")
+								fmt.Println("                   KIRIM PESAN                 ")
+								fmt.Println("-----------------------------------------------")
 								fmt.Println("Masukan username yang mau anda kirimkan pesan")
-								fmt.Scan(&penerima)
+								// fmt.Scan(&penerima)
+								scanner.Scan()
+								penerima := scanner.Text()
 
-								var pesan string
+								// var pesan string
 								fmt.Println("Masukan Pesan")
-								fmt.Scan(&pesan)
+								// fmt.Scan(&pesan)
+								scanner.Scan()
+								pesan := scanner.Text()
 
 								check := messageController.SendMessage(&penerima, &token.Username, &pesan)
-
+								fmt.Println("-----------------------------------------------")
 								if check == 200 {
 									fmt.Println("Pesan anda sudah terkirim ke ", penerima)
 								} else {
 									fmt.Println("Username penerima tidak di temukan")
 								}
+								time.Sleep(1 * time.Second)
+								clear()
 							} else if pilihPesan == 3 {
+								clear()
 								goto dashboard
 							} else {
+								fmt.Println("-----------------------------------------------")
 								fmt.Println("Format tidak di temukan")
+								time.Sleep(1 * time.Second)
+								clear()
 							}
 						}
-
 					} else if inputDashboard == 3 {
-						
+						clear()
+						fmt.Println("-----------------------------------------------")
+						fmt.Println("                  BUAT CERITA                  ")
+						fmt.Println("-----------------------------------------------")
 						fmt.Println("1. Blog")
 						fmt.Println("2. Programming")
 						fmt.Println("Masukan kategori")
+
 						fmt.Scan(&pilihCategory)
+						scanner.Scan()
+
 						if pilihCategory == 1 {
 							category = "Blog"
 						} else {
 							category = "Programming"
 						}
 
-						fmt.Println("Masukan title")
+						fmt.Println("Masukan judul")
 						fmt.Scan(&title)
+						scanner.Scan()
 
-						fmt.Println("Masukan body")
-						fmt.Scan(&body)
+						fmt.Println("Masukan cerita")
+						// fmt.Scan(&body)
+						scanner.Scan()
+						body := scanner.Text()
 
 						dataPost := &db.FieldPost{
 							Author:   token.Username,
@@ -183,21 +249,31 @@ func main() {
 
 						kode := postController.InsertPost(dataPost)
 
+						fmt.Println("-----------------------------------------------")
 						if kode == 200 {
 							fmt.Println("postingan telah di buat")
 						} else {
 							fmt.Println("Judul telah di gunakan")
 						}
-						
+						time.Sleep(1 * time.Second)
+						clear()
 					} else if inputDashboard == 4 {
-						
+						clear()
+						fmt.Println("-----------------------------------------------")
+						fmt.Println("                  EDIT CERITA                  ")
+						fmt.Println("-----------------------------------------------")
 						fmt.Println("Masukan judul post yang mau di ubah")
 						fmt.Scan(&title)
+						scanner.Scan()
 
-						fmt.Println("Masukan carita baru")
-						fmt.Scan(&body)
+						fmt.Println("Masukan cerita baru")
+						// fmt.Scan(&body)
+						scanner.Scan()
+						body := scanner.Text()
+
 						kode := postController.UpdatePost(&title, &body, &token.Username)
 
+						fmt.Println("-----------------------------------------------")
 						if kode == 200 {
 							fmt.Println("Postingan sudah di update")
 						} else if kode == 403 {
@@ -205,13 +281,19 @@ func main() {
 						} else {
 							fmt.Println("Postingan tidak di temukan")
 						}
+						time.Sleep(1 * time.Second)
+						clear()
 					} else if inputDashboard == 5 {
-						
+						clear()
+						fmt.Println("-----------------------------------------------")
+						fmt.Println("                  HAPUS CERIA                  ")
+						fmt.Println("-----------------------------------------------")
 						fmt.Println("Masukan judul post yang mau di hapus")
 						fmt.Scan(&title)
 
 						kode := postController.DeletePost(&title, &token.Username)
 
+						fmt.Println("-----------------------------------------------")
 						if kode == 200 {
 							fmt.Println("Postingan sudah di hapus")
 						} else if kode == 403 {
@@ -219,30 +301,49 @@ func main() {
 						} else {
 							fmt.Println("Postingan tidak di temukan")
 						}
+						time.Sleep(1 * time.Second)
+						clear()
 					} else if inputDashboard == 6 {
-						
+						clear()
+						fmt.Println("-----------------------------------------------")
+						fmt.Println("                  CARI AKUN                    ")
+						fmt.Println("-----------------------------------------------")
 						fmt.Println("Masukan username")
-						fmt.Scan(&username)
+						// fmt.Scan(&username)
+						scanner.Scan()
+						username := scanner.Text()
 
 						akun := userController.ShowPostByAccount(&username)
 
 						if akun != nil {
-							fmt.Println("Username : ", username, "\n")
+							clear()
+							fmt.Println("-----------------------------------------------")
+							fmt.Println("Username : ", username)
+							fmt.Println("-----------------------------------------------\n")
+
 							for _, val := range *akun {
+								fmt.Println("-----------------------------------------------")
 								fmt.Println("Author : ", val.Author)
+								fmt.Println("-----------------------------------------------")
 								fmt.Println("Category : ", val.Category)
 								fmt.Println("Title : ", val.Title)
 								fmt.Println("Body : ", val.Body)
+								fmt.Println("-----------------------------------------------")
 							}
 						} else {
+							fmt.Println("-----------------------------------------------")
 							fmt.Println("Akun tersebut belum memposting apapun")
 						}
 					} else if inputDashboard == 7 {
-						
+						clear()
+						fmt.Println("-----------------------------------------------")
+						fmt.Println("                 CARI KATEGORI                 ")
+						fmt.Println("-----------------------------------------------")
 						fmt.Println("Masukan Kategori yang mau anda cari")
 						fmt.Println("1. Blog")
 						fmt.Println("2. Programming")
 						fmt.Scan(&pilihCategory)
+						scanner.Scan()
 
 						if pilihCategory == 1 || pilihCategory == 2 {
 							if pilihCategory == 1 {
@@ -251,22 +352,32 @@ func main() {
 								category = "Programming"
 							}
 							post := postController.ShowByCategory(&category)
-
+							
 							for _, val := range *post {
+								fmt.Println("-----------------------------------------------")
 								fmt.Println("Author : ", val.Author)
+								fmt.Println("-----------------------------------------------")
 								fmt.Println("Kategori : ", val.Category)
 								fmt.Println("Title : ", val.Title)
 								fmt.Println("Body : ", val.Body)
+								fmt.Println("-----------------------------------------------\n")
 							}
 						} else {
+							fmt.Println("-----------------------------------------------")
 							fmt.Println("Kategori tidak di temukan")
+							time.Sleep(1 * time.Second)
+							clear()
 						}
 					} else if inputDashboard == 8 {
+						clear()
 						goto menu
 					}
 				}
 			} else {
+				fmt.Println("-----------------------------------------------")
 				fmt.Println("Username atau password salah")
+				time.Sleep(1 * time.Second)
+				clear()
 			}
 		} else {
 			break

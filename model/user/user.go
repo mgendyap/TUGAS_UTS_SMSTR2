@@ -50,6 +50,5 @@ func FindUserAndPost(username *string) *[]db.FieldPost {
 		}
 		temp = temp.Next
 	}
-
 	return &response
 }

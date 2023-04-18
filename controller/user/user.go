@@ -44,3 +44,13 @@ func ShowPostByAccount(username *string) *[]db.FieldPost {
 
 	return response
 }
+
+func SearchAccount(username *string) *string {
+	check := userModel.FindOne(username)
+
+	if check != nil && check.Username != ""{
+		return &check.Username
+	}
+
+	return nil
+}

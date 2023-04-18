@@ -6,18 +6,18 @@ import (
 	"utsstrukdat/model/user"
 )
 
-func ShowMessage(user *string) *[]db.FieldMessage {
+func ShowMessage(user string) *[]db.FieldMessage {
 
 	response := messageModel.FindMessage(user)
 
 	return response
 }
 
-func SendMessage(penerima *string, pengirim *string, pesan *string) int {
+func SendMessage(penerima string, pengirim string, pesan string) int {
 	
 	check := userModel.FindOne(penerima)
 
-	if check == nil {
+	if check.Username == "" {
 		return 404
 	}
 

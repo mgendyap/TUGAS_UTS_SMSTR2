@@ -16,7 +16,7 @@ func clear() {
 	cmd.Run()
 }
 
-func Post(token *db.FieldUser){
+func Post(token db.FieldUser){
 	var inputPost int
 	var category string
 	var pilihCategory int
@@ -91,7 +91,7 @@ func Post(token *db.FieldUser){
 		scanner.Scan()
 		body := scanner.Text()
 
-		kode := postController.UpdatePost(&title, &body, &token.Username)
+		kode := postController.UpdatePost(title, body, token.Username)
 
 		fmt.Println("-----------------------------------------------")
 		if kode == 200 {
@@ -111,7 +111,7 @@ func Post(token *db.FieldUser){
 		fmt.Println("Masukan judul post yang mau di hapus")
 		fmt.Scan(&title)
 
-		kode := postController.DeletePost(&title, &token.Username)
+		kode := postController.DeletePost(title, token.Username)
 
 		fmt.Println("-----------------------------------------------")
 		if kode == 200 {
@@ -121,6 +121,10 @@ func Post(token *db.FieldUser){
 		} else {
 			fmt.Println("Postingan tidak di temukan")
 		}
+		time.Sleep(1 * time.Second)
+		clear()
+	} else {
+		fmt.Println("Format tidak di temukan")
 		time.Sleep(1 * time.Second)
 		clear()
 	}

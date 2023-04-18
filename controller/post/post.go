@@ -10,7 +10,7 @@ func ShowPost() *[]db.FieldPost {
 }
 
 func InsertPost(req *db.FieldPost) int {
-	check := postModel.FindOne(&req.Title)
+	check := postModel.FindOne(req.Title)
 
 	if check != nil {
 		return 409
@@ -20,11 +20,11 @@ func InsertPost(req *db.FieldPost) int {
 	return 200
 }
 
-func UpdatePost(title *string, body *string, author *string) int {
+func UpdatePost(title string, body string, author string) int {
 	check := postModel.FindOne(title)
 
 	if check.Title != "" {
-		if check.Author != *author {
+		if check.Author != author {
 			return 403
 		}
 
@@ -35,11 +35,11 @@ func UpdatePost(title *string, body *string, author *string) int {
 	return 404
 }
 
-func DeletePost(title *string, author *string) int {
+func DeletePost(title string, author string) int {
 	check := postModel.FindOne(title)
 
 	if check.Title != "" {
-		if check.Author != *author {
+		if check.Author != author {
 			return 403
 		}
 
@@ -50,7 +50,7 @@ func DeletePost(title *string, author *string) int {
 	return 404
 }
 
-func ShowByCategory(category *string) *[]db.FieldPost {
+func ShowByCategory(category string) *[]db.FieldPost {
 
 	response := postModel.FindPostByCategory(category)
 

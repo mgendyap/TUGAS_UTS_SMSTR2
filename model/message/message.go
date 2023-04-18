@@ -4,13 +4,13 @@ import (
 	"utsstrukdat/db"
 )
 
-func FindMessage(user *string) *[]db.FieldMessage {
+func FindMessage(user string) *[]db.FieldMessage {
 	var dataMessage *db.Message = &db.DataMessage
 	temp := dataMessage.Next
 
 	var response []db.FieldMessage
 	for temp != nil {
-		if temp.Data.To == *user {
+		if temp.Data.To == user {
 
 			response = append(response, temp.Data)
 		}
@@ -19,14 +19,14 @@ func FindMessage(user *string) *[]db.FieldMessage {
 	return &response
 }
 
-func CreateMessage(penerima *string, pengirim *string, pesan *string){
+func CreateMessage(penerima string, pengirim string, pesan string){
 	var dataMessage *db.Message = &db.DataMessage
 
 	data := &db.Message{
 		Data: db.FieldMessage{
-			From: *pengirim,
-			To: *penerima,
-			Message: *pesan,
+			From: pengirim,
+			To: penerima,
+			Message: pesan,
 		},
 	}
 

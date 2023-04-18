@@ -4,22 +4,22 @@ import (
 	"utsstrukdat/db"
 )
 
-func FindOne(username *string) *db.FieldUser {
+func FindOne(username string) db.FieldUser {
 	var dataUser *db.User = &db.DataUser
 	temp := dataUser.Next
 
 	for temp != nil {
-		if temp.Data.Username == *username {
+		if temp.Data.Username == username {
 
-			return &temp.Data
+			return temp.Data
 		}
 		temp = temp.Next
 	}
 
-	return nil
+	return db.FieldUser{}
 }
 
-func Create(req *db.FieldUser){
+func Create(req db.FieldUser){
 	var dataUser *db.User = &db.DataUser
 
 	data := &db.User{
@@ -37,14 +37,14 @@ func Create(req *db.FieldUser){
 	}
 }
 
-func FindUserAndPost(username *string) *[]db.FieldPost {
+func FindUserAndPost(username string) *[]db.FieldPost {
 	var dataPost *db.Post = &db.DataPost
 	temp := dataPost.Next
 
 	var response []db.FieldPost
 
 	for temp != nil {
-		if temp.Data.Author == *username {
+		if temp.Data.Author == username {
 			
 			response = append(response, temp.Data)
 		}

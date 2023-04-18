@@ -20,7 +20,7 @@ func clear() {
 }
 
 
-func Dashboard(token *db.FieldUser){
+func Dashboard(token db.FieldUser){
 	scanner := bufio.NewScanner(os.Stdin)
 	var category string
 	var pilihCategory int
@@ -74,7 +74,7 @@ func Dashboard(token *db.FieldUser){
 
 				if pilihPesan == 1 {
 					clear()
-					message := messageController.ShowMessage(&token.Username)
+					message := messageController.ShowMessage(token.Username)
 					fmt.Println("-----------------------------------------------")
 					fmt.Println("                  LIHAT PESAN                  ")
 					fmt.Println("-----------------------------------------------\n")
@@ -103,7 +103,7 @@ func Dashboard(token *db.FieldUser){
 					scanner.Scan()
 					pesan := scanner.Text()
 
-					check := messageController.SendMessage(&penerima, &token.Username, &pesan)
+					check := messageController.SendMessage(penerima, token.Username, pesan)
 					fmt.Println("-----------------------------------------------")
 					if check == 200 {
 						fmt.Println("Pesan anda sudah terkirim ke ", penerima)
@@ -132,9 +132,9 @@ func Dashboard(token *db.FieldUser){
 			scanner.Scan()
 			username := scanner.Text()
 
-			akun := userController.SearchAccount(&username)
+			akun := userController.SearchAccount(username)
 
-			if akun == nil{
+			if akun == ""{
 				fmt.Println("-----------------------------------------------")
 				fmt.Println("Akun tidak di temukan")
 			}else{
@@ -142,7 +142,7 @@ func Dashboard(token *db.FieldUser){
 				fmt.Println("-----------------------------------------------")
 				fmt.Println("Username : ", akun)
 				fmt.Println("-----------------------------------------------")
-				post := userController.ShowPostByAccount(&username)
+				post := userController.ShowPostByAccount(username)
 
 				if post != nil && *post != nil{
 					for _, val := range *post {
@@ -176,7 +176,7 @@ func Dashboard(token *db.FieldUser){
 				} else if pilihCategory == 2 {
 					category = "Programming"
 				}
-				post := postController.ShowByCategory(&category)
+				post := postController.ShowByCategory(category)
 				
 				for _, val := range *post {
 					fmt.Println("-----------------------------------------------")
@@ -195,9 +195,13 @@ func Dashboard(token *db.FieldUser){
 			}
 		} else if inputDashboard == 5 {
 			post.Post(token)
-		} else{
+		} else if inputDashboard == 6 {
 			clear()
 			break
+		}else {
+			fmt.Println("Format tidak di temukan")
+			time.Sleep(1 * time.Second)
+			clear()
 		}
 	}
 }

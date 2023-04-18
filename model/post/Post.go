@@ -18,12 +18,12 @@ func Find() *[]db.FieldPost {
 	return &data
 }
 
-func FindOne(judul *string) *db.FieldPost {
+func FindOne(judul string) *db.FieldPost {
 	var dataPost *db.Post = &db.DataPost
 	temp := dataPost.Next
 
 	for temp != nil {
-		if temp.Data.Title == *judul {
+		if temp.Data.Title == judul {
 
 			return &temp.Data
 		}
@@ -53,28 +53,28 @@ func Create(req *db.FieldPost){
 	}
 }
 
-func FindByTitleAndUpdate(title *string, body *string){
+func FindByTitleAndUpdate(title string, body string){
 	var dataPost *db.Post = &db.DataPost
 	temp := dataPost.Next
 
 	for temp != nil {
-		if temp.Data.Title == *title {
+		if temp.Data.Title == title {
 
-			temp.Data.Body = *body
+			temp.Data.Body = body
 			break
 		}
 		temp = temp.Next
 	}
 }
 
-func FindByTitleAndDelete(title *string){
+func FindByTitleAndDelete(title string){
 	var dataPost *db.Post = &db.DataPost
 
 	after := dataPost.Next
 	before := dataPost
 
 	for after != nil {
-		if after.Data.Title == *title {
+		if after.Data.Title == title {
 			if  after == dataPost.Next {
 				dataPost.Next = after.Next
 			}else{
@@ -87,14 +87,14 @@ func FindByTitleAndDelete(title *string){
 	}
 }
 
-func FindPostByCategory(category *string) *[]db.FieldPost {
+func FindPostByCategory(category string) *[]db.FieldPost {
 	var dataPost *db.Post = &db.DataPost
 	temp := dataPost.Next
 
 	var response []db.FieldPost
 
 	for temp != nil {
-		if temp.Data.Category == *category {
+		if temp.Data.Category == category {
 
 			response = append(response, temp.Data)
 		}

@@ -54,12 +54,12 @@ func main() {
 			scanner.Scan()
 			verPassword := scanner.Text()
 
-			dataUser := &db.FieldUser{
+			dataUser := db.FieldUser{
 				Username: username,
 				Password: password,
 			}
 
-			kode := userController.Register(dataUser, &verPassword)
+			kode := userController.Register(dataUser, verPassword)
 			fmt.Println("-----------------------------------------------")
 			if kode == 200 {
 				fmt.Println("Akun sudah di buat")
@@ -85,28 +85,31 @@ func main() {
 			scanner.Scan()
 			password := scanner.Text()
 
-			dataUser := &db.FieldUser{
+			dataUser := db.FieldUser{
 				Username: username,
 				Password: password,
 			}
 
 			token := userController.Login(dataUser)
 			
-			if token != nil {
+			if token.Username != "" {
 				fmt.Println("-----------------------------------------------")
 				fmt.Println("Selamat datang ", token.Username)
 				time.Sleep(1 * time.Second)
 				clear()
 				dashboard.Dashboard(token)
-
-			} else {
-				fmt.Println("-----------------------------------------------")
-				fmt.Println("Username atau password salah")
-				time.Sleep(1 * time.Second)
-				clear()
+				continue
 			}
-		} else {
+			fmt.Println("-----------------------------------------------")
+			fmt.Println("Username atau password salah")
+			time.Sleep(1 * time.Second)
+			clear()
+		} else if inputMenu == 3 {
 			break
+		}else {
+			fmt.Println("Format tidak di temukan")
+			time.Sleep(1 * time.Second)
+			clear()
 		}
 	}
 }

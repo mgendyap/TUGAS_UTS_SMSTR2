@@ -5,15 +5,15 @@ import (
 	"utsstrukdat/model/user"
 )
 
-func Register(req *db.FieldUser, verPassword *string) int {
+func Register(req db.FieldUser, verPassword string) int {
 
-	check := userModel.FindOne(&req.Username)
+	check := userModel.FindOne(req.Username)
 
-	if check != nil && check.Username != "" {
+	if check.Username != "" {
 		return 409
 	}
 	
-	if req.Password != *verPassword {
+	if req.Password != verPassword {
 		return 400
 	}
 
@@ -21,22 +21,22 @@ func Register(req *db.FieldUser, verPassword *string) int {
 	return 200
 }
 
-func Login(req *db.FieldUser) *db.FieldUser {
+func Login(req db.FieldUser) db.FieldUser {
 
-	check := userModel.FindOne(&req.Username)
+	check := userModel.FindOne(req.Username)
 
 	if check.Username == req.Username && check.Password == req.Password {
 		return check
 	}
 
-	return nil
+	return db.FieldUser{}
 }
 
-func ShowPostByAccount(username *string) *[]db.FieldPost {
+func ShowPostByAccount(username string) *[]db.FieldPost {
 
 	check := userModel.FindOne(username)
 
-	if check == nil {
+	if check.Username == "" {
 		return nil
 	}
 
@@ -45,12 +45,12 @@ func ShowPostByAccount(username *string) *[]db.FieldPost {
 	return response
 }
 
-func SearchAccount(username *string) *string {
+func SearchAccount(username string) string {
 	check := userModel.FindOne(username)
 
-	if check != nil && check.Username != ""{
-		return &check.Username
+	if check.Username != ""{
+		return check.Username
 	}
 
-	return nil
+	return ""
 }
